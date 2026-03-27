@@ -7,6 +7,7 @@ from textual.app import App, ComposeResult
 from textual.containers import Container, Vertical
 from textual.widgets import Footer, Header, TabPane, TabbedContent
 
+from tool_tui import __version__
 from tool_tui.config import AppConfig
 from tool_tui.process import ToolProcess
 from tool_tui.themes import CUSTOM_THEMES
@@ -26,6 +27,7 @@ class ToolTuiApp(App):
         processes: Dictionary of tool name to ToolProcess.
     """
 
+    TITLE = f"Tool TUI v{__version__}"
     CSS_PATH = "app.tcss"
 
     BINDINGS = [
