@@ -113,10 +113,10 @@ class ToolPanel(Widget):
             yield Static(self.tool_process.name, classes="tool-name")
             if running:
                 yield Static("RUNNING", classes="status running", id=f"status-{self._safe_id}")
-                yield Button("Stop", id=f"toggle-{self._safe_id}", variant="error")
+                yield Button("Stop", id=f"toggle-{self._safe_id}", variant="default")
             else:
                 yield Static("STOPPED", classes="status stopped", id=f"status-{self._safe_id}")
-                yield Button("Start", id=f"toggle-{self._safe_id}", variant="success")
+                yield Button("Start", id=f"toggle-{self._safe_id}", variant="default")
             yield Button("Clear", id=f"clear-{self._safe_id}", variant="default")
         yield RichLog(id=f"log-{self._safe_id}", highlight=True, markup=True, wrap=True)
 
@@ -158,7 +158,7 @@ class ToolPanel(Widget):
             await self.tool_process.start()
         except (RuntimeError, OSError) as e:
             log = self.query_one(RichLog)
-            log.write(Text(f"Error: {e}", style="bold red"))
+            log.write(Text(f"Error: {e}", style=f"bold {self.app.current_theme.error}"))
             return
 
         self._update_status(running=True)
@@ -207,7 +207,7 @@ class ToolPanel(Widget):
             line: The output line to display.
         """
         if line.is_stderr:
-            log.write(Text(line.text, style="red"))
+            log.write(Text(line.text, style=self.app.current_theme.error))
         else:
             log.write(line.text)
 
