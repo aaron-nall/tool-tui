@@ -18,6 +18,8 @@ from pydantic import ValidationError
 
 from textual.app import App as TextualApp
 
+from tool_tui.themes import CUSTOM_THEMES
+
 from tool_tui.config import AppConfig, generate_schema
 
 logger = logging.getLogger(__name__)
@@ -447,7 +449,10 @@ def _create_app(config_path: str) -> FastAPI:
     @app.get("/api/themes")
     async def get_themes() -> JSONResponse:
         """Return available Textual theme names."""
-        themes = sorted(TextualApp().available_themes.keys())
+        tapp = TextualApp()
+        for t in CUSTOM_THEMES:
+            tapp.register_theme(t)
+        themes = sorted(tapp.available_themes.keys())
         return JSONResponse(content=themes)
 
     @app.get("/api/schema")

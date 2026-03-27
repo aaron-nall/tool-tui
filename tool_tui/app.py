@@ -9,6 +9,7 @@ from textual.widgets import Footer, Header, TabPane, TabbedContent
 
 from tool_tui.config import AppConfig
 from tool_tui.process import ToolProcess
+from tool_tui.themes import CUSTOM_THEMES
 from tool_tui.widgets.tool_panel import ToolPanel
 
 logger = logging.getLogger(__name__)
@@ -39,8 +40,6 @@ class ToolTuiApp(App):
             config: The application configuration.
         """
         super().__init__()
-        if config.theme:
-            self.theme = config.theme
         self.config = config
         self.current_view = config.default_view
         self.processes: dict[str, ToolProcess] = {}
@@ -60,6 +59,10 @@ class ToolTuiApp(App):
 
     async def on_mount(self) -> None:
         """Build the initial view and auto-start configured tools."""
+        for t in CUSTOM_THEMES:
+            self.register_theme(t)
+        if self.config.theme:
+            self.theme = self.config.theme
         await self._build_view()
 
         for tool_config in self.config.tools:
