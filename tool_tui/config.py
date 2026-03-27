@@ -45,6 +45,7 @@ class AppConfig(BaseModel):
     """
 
     default_view: ViewMode = Field(default=ViewMode.TABS, description="Default view mode")
+    theme: Optional[str] = Field(default=None, description="Textual theme name")
     tools: list[ToolConfig] = Field(default_factory=list, description="List of tool configurations")
 
     @model_validator(mode="after")

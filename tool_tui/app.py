@@ -39,6 +39,8 @@ class ToolTuiApp(App):
             config: The application configuration.
         """
         super().__init__()
+        if config.theme:
+            self.theme = config.theme
         self.config = config
         self.current_view = config.default_view
         self.processes: dict[str, ToolProcess] = {}

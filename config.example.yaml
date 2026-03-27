@@ -1,4 +1,5 @@
 default_view: tabs  # "tabs" or "stacked"
+# theme: dracula
 
 tools:
   - name: "System Monitor"

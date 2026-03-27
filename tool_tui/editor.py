@@ -16,6 +16,8 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from pydantic import ValidationError
 
+from textual.app import App as TextualApp
+
 from tool_tui.config import AppConfig, generate_schema
 
 logger = logging.getLogger(__name__)
@@ -103,6 +105,13 @@ _HTML_TEMPLATE = """\
 </div>
 
 <div class="section">
+  <label for="theme">Theme</label>
+  <select id="theme">
+    <option value="">(default)</option>
+  </select>
+</div>
+
+<div class="section">
   <h2>Tools</h2>
   <div id="tools-list"></div>
   <button onclick="addTool()">+ Add Tool</button>
@@ -118,10 +127,26 @@ _HTML_TEMPLATE = """\
 let tools = [];
 
 async function loadConfig() {
-  const resp = await fetch("/api/config");
-  if (!resp.ok) { setStatus("Failed to load config", true); return; }
-  const data = await resp.json();
+  const [configResp, themesResp] = await Promise.all([
+    fetch("/api/config"),
+    fetch("/api/themes")
+  ]);
+  if (!configResp.ok) { setStatus("Failed to load config", true); return; }
+  const data = await configResp.json();
   document.getElementById("default-view").value = data.default_view || "tabs";
+
+  if (themesResp.ok) {
+    const themes = await themesResp.json();
+    const sel = document.getElementById("theme");
+    themes.forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      sel.appendChild(opt);
+    });
+    sel.value = data.theme || "";
+  }
+
   tools = data.tools || [];
   renderTools();
 }
@@ -203,8 +228,10 @@ function collectFormData() {
       tools[i][field] = inp.value;
     }
   });
+  const themeVal = document.getElementById("theme").value;
   return {
     default_view: document.getElementById("default-view").value,
+    theme: themeVal || null,
     tools: tools.map(t => {
       const out = { name: t.name, command: t.command, autostart: t.autostart || false };
       if (t.working_dir) out.working_dir = t.working_dir;
@@ -350,6 +377,9 @@ def _config_to_yaml(config: AppConfig) -> str:
         YAML string representation.
     """
     data = config.model_dump(mode="json")
+    for key in list(data.keys()):
+        if data[key] is None:
+            del data[key]
     for tool in data.get("tools", []):
         for key in list(tool.keys()):
             if tool[key] is None:
@@ -413,6 +443,12 @@ def _create_app(config_path: str) -> FastAPI:
             )
 
         return JSONResponse(content={"status": "ok"})
+
+    @app.get("/api/themes")
+    async def get_themes() -> JSONResponse:
+        """Return available Textual theme names."""
+        themes = sorted(TextualApp().available_themes.keys())
+        return JSONResponse(content=themes)
 
     @app.get("/api/schema")
     async def get_schema() -> JSONResponse:
