@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tool-tui"
-version = "0.1.5"
+version = "0.1.6"
 description = "A TUI for managing unattended tools and processes"
 authors = []
 readme = "README.md"

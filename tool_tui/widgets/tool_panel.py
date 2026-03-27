@@ -62,30 +62,24 @@ class ToolPanel(Widget):
         border-bottom: none;
         margin: 0 1;
         padding: 0 1;
-    }
-
-    ToolPanel Button.-success {
-        border: none;
-        border-top: none;
-        border-bottom: none;
-    }
-
-    ToolPanel Button.-error {
-        border: none;
-        border-top: none;
-        border-bottom: none;
+        background: $primary;
+        color: $background;
     }
 
     ToolPanel Button:hover {
         border: none;
         border-top: none;
         border-bottom: none;
+        background: $accent;
+        color: $background;
     }
 
     ToolPanel Button.-active {
         border: none;
         border-top: none;
         border-bottom: none;
+        background: $accent;
+        color: $background;
     }
 
     ToolPanel RichLog {
