@@ -51,7 +51,7 @@ class ToolPanel(Widget):
     }
 
     ToolPanel .status.stopped {
-        color: $error;
+        color: $secondary;
     }
 
     ToolPanel Button {
