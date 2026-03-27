@@ -56,30 +56,8 @@ class ToolPanel(Widget):
 
     ToolPanel Button {
         min-width: 10;
-        height: 1;
-        border: none;
-        border-top: none;
-        border-bottom: none;
         margin: 0 1;
         padding: 0 1;
-        background: $primary;
-        color: $background;
-    }
-
-    ToolPanel Button:hover {
-        border: none;
-        border-top: none;
-        border-bottom: none;
-        background: $accent;
-        color: $background;
-    }
-
-    ToolPanel Button.-active {
-        border: none;
-        border-top: none;
-        border-bottom: none;
-        background: $accent;
-        color: $background;
     }
 
     ToolPanel RichLog {

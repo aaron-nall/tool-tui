@@ -15,3 +15,29 @@ TabPane {
     height: 1fr;
     padding: 0;
 }
+
+ToolPanel Button {
+    height: 1;
+    max-height: 1;
+    border: none;
+    border-top: none;
+    border-bottom: none;
+    background: $primary;
+    color: $background;
+}
+
+ToolPanel Button:hover {
+    border: none;
+    border-top: none;
+    border-bottom: none;
+    background: $accent;
+    color: $background;
+}
+
+ToolPanel Button.-active {
+    border: none;
+    border-top: none;
+    border-bottom: none;
+    background: $accent;
+    color: $background;
+}
