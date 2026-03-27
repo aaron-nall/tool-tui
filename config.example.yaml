@@ -1,0 +1,15 @@
+default_view: tabs  # "tabs" or "stacked"
+
+tools:
+  - name: "System Monitor"
+    command: "vmstat 2"
+    autostart: true
+
+  - name: "Disk Usage Watch"
+    command: "watch -n 5 df -h"
+    autostart: false
+
+  - name: "Log Tailer"
+    command: "tail -f /var/log/syslog"
+    autostart: false
+    working_dir: "/var/log"

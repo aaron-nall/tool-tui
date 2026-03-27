@@ -1,0 +1,73 @@
+{
+  "$defs": {
+    "ToolConfig": {
+      "description": "Configuration for a single tool.\n\nAttributes:\n    name: Display name of the tool.\n    command: Shell command to execute.\n    autostart: Whether to start the tool automatically on launch.\n    working_dir: Optional working directory for the command.",
+      "properties": {
+        "name": {
+          "description": "Display name of the tool",
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        },
+        "command": {
+          "description": "Shell command to execute",
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "autostart": {
+          "default": false,
+          "description": "Whether to start the tool automatically on launch",
+          "title": "Autostart",
+          "type": "boolean"
+        },
+        "working_dir": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional working directory for the command",
+          "title": "Working Dir"
+        }
+      },
+      "required": [
+        "name",
+        "command"
+      ],
+      "title": "ToolConfig",
+      "type": "object"
+    },
+    "ViewMode": {
+      "description": "Available view modes for the TUI layout.",
+      "enum": [
+        "tabs",
+        "stacked"
+      ],
+      "title": "ViewMode",
+      "type": "string"
+    }
+  },
+  "description": "Top-level application configuration.\n\nAttributes:\n    default_view: Default view mode, either \"tabs\" or \"stacked\".\n    tools: List of tool configurations.",
+  "properties": {
+    "default_view": {
+      "$ref": "#/$defs/ViewMode",
+      "default": "tabs",
+      "description": "Default view mode"
+    },
+    "tools": {
+      "description": "List of tool configurations",
+      "items": {
+        "$ref": "#/$defs/ToolConfig"
+      },
+      "title": "Tools",
+      "type": "array"
+    }
+  },
+  "title": "AppConfig",
+  "type": "object"
+}

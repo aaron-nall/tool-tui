@@ -1,0 +1,17 @@
+#main-container {
+    height: 1fr;
+}
+
+#stacked-view {
+    height: 1fr;
+}
+
+
+#tabbed-view {
+    height: 1fr;
+}
+
+TabPane {
+    height: 1fr;
+    padding: 0;
+}
