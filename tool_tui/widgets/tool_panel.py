@@ -123,6 +123,8 @@ class ToolPanel(Widget):
         elif button_id == f"clear-{safe}":
             self._clear_log()
 
+        self.screen.set_focus(None)
+
     @work(exclusive=True, group="tool-lifecycle")
     async def _start_tool(self) -> None:
         """Start the tool process and begin streaming output."""
