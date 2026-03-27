@@ -6,6 +6,7 @@ import logging
 import os
 import signal
 import socket
+import sys
 import threading
 import webbrowser
 from pathlib import Path
@@ -488,6 +489,20 @@ def run_editor(config_path: str) -> None:
         with open(path, "w") as f:
             yaml.dump(default.model_dump(mode="json"), f, default_flow_style=False)
         logger.info("Created default config at %s", config_path)
+    else:
+        try:
+            with open(path) as f:
+                raw = yaml.safe_load(f) or {}
+            if not isinstance(raw, dict):
+                print(f"Error: Config file must contain a YAML mapping: {config_path}", file=sys.stderr)
+                sys.exit(1)
+            AppConfig(**raw)
+        except yaml.YAMLError as e:
+            print(f"Error: Invalid YAML in {config_path}:\n{e}", file=sys.stderr)
+            sys.exit(1)
+        except ValidationError as e:
+            print(f"Config validation error in {config_path}:\n{e}", file=sys.stderr)
+            sys.exit(1)
 
     port = _find_free_port()
     url = f"http://127.0.0.1:{port}"
