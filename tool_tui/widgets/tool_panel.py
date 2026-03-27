@@ -130,7 +130,7 @@ class ToolPanel(Widget):
             await self.tool_process.start()
         except (RuntimeError, OSError) as e:
             log = self.query_one(RichLog)
-            log.write(Text(f"Error: {e}", style=f"bold {self.app.current_theme.error}"))
+            log.write(Text(f"Error: {e}", style="bold italic"))
             return
 
         self._update_status(running=True)
@@ -179,7 +179,7 @@ class ToolPanel(Widget):
             line: The output line to display.
         """
         if line.is_stderr:
-            log.write(Text(line.text, style=self.app.current_theme.error))
+            log.write(Text(line.text, style="bold italic"))
         else:
             log.write(line.text)
 
