@@ -90,7 +90,7 @@ class ToolPanel(Widget):
                 yield Static("STOPPED", classes="status stopped", id=f"status-{self._safe_id}")
                 yield Button("Start", id=f"toggle-{self._safe_id}", variant="default")
             yield Button("Clear", id=f"clear-{self._safe_id}", variant="default")
-        yield RichLog(id=f"log-{self._safe_id}", highlight=True, markup=True, wrap=True)
+        yield RichLog(id=f"log-{self._safe_id}", highlight=False, markup=True, wrap=True)
 
     @property
     def _safe_id(self) -> str:
@@ -199,7 +199,7 @@ class ToolPanel(Widget):
         toggle_btn = self.query_one(f"#toggle-{safe}", Button)
         if running:
             toggle_btn.label = "Stop"
-            toggle_btn.variant = "error"
+            toggle_btn.variant = "default"
         else:
             toggle_btn.label = "Start"
-            toggle_btn.variant = "success"
+            toggle_btn.variant = "default"
