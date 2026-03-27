@@ -9,7 +9,7 @@ from textual.widgets import Footer, Header, TabPane, TabbedContent
 
 from tool_tui import __version__
 from tool_tui.config import AppConfig
-from tool_tui.process import ToolProcess
+from tool_tui.process import ToolProcess, process_manager
 from tool_tui.themes import CUSTOM_THEMES
 from tool_tui.widgets.tool_panel import ToolPanel
 
@@ -111,7 +111,5 @@ class ToolTuiApp(App):
 
     async def action_quit_app(self) -> None:
         """Stop all running processes and quit."""
-        for process in self.processes.values():
-            if process.is_running:
-                await process.stop()
+        await process_manager.async_shutdown()
         self.exit()
