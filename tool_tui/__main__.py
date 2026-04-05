@@ -33,6 +33,11 @@ def main() -> None:
     parser.add_argument(
         "--edit",
         action="store_true",
+        help="Launch TUI-based configuration editor",
+    )
+    parser.add_argument(
+        "--edit-web",
+        action="store_true",
         help="Launch web-based configuration editor",
     )
     args = parser.parse_args()
@@ -42,6 +47,12 @@ def main() -> None:
         return
 
     if args.edit:
+        from tool_tui.tui_editor import run_tui_editor
+
+        run_tui_editor(args.config)
+        return
+
+    if args.edit_web:
         from tool_tui.editor import run_editor
 
         run_editor(args.config)

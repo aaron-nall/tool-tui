@@ -7,7 +7,8 @@ A terminal UI for managing unattended tools and processes. Define tools in a YAM
 - **Start/stop controls** for each tool with real-time stdout/stderr streaming
 - **Two view modes**: tabbed (one tool per tab) or horizontally stacked (all visible)
 - **Per-tool autostart** on launch
-- **Web-based config editor** via `--edit`
+- **TUI config editor** via `--edit`
+- **Web-based config editor** via `--edit-web`
 - **JSON Schema** generation for config validation via `--schema`
 - Output persists across view switches
 
@@ -34,10 +35,18 @@ tool-tui --config config.yaml
 | `v` | Toggle between tabbed and stacked views |
 | `q` | Quit (stops all running processes) |
 
-### Edit config in the browser
+### Edit config in the terminal
 
 ```bash
 tool-tui --edit --config config.yaml
+```
+
+Opens an interactive TUI editor. Press Ctrl+S to save, Ctrl+Q to save and quit.
+
+### Edit config in the browser
+
+```bash
+tool-tui --edit-web --config config.yaml
 ```
 
 Opens a local web editor on `127.0.0.1`. Press Ctrl+C to stop the server.
