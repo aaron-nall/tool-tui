@@ -62,12 +62,14 @@ class ToolCard(Vertical):
     """
 
     def __init__(self, index: int, tool_data: dict, total: int) -> None:
+        """Initialize a ToolCard widget."""
         super().__init__()
         self.tool_index = index
         self.tool_data = tool_data
         self.total = total
 
     def compose(self) -> ComposeResult:
+        """Build the ToolCard UI."""
         i = self.tool_index
         with Horizontal(classes="tool-card-header"):
             yield Static(f"Tool #{i + 1}")
@@ -192,6 +194,7 @@ class ConfigEditorApp(App):
     ]
 
     def __init__(self, config_path: str) -> None:
+        """Initialize the config editor app."""
         super().__init__()
         self.config_path = config_path
         self._load_data()
@@ -212,6 +215,7 @@ class ConfigEditorApp(App):
             self.tools = []
 
     def compose(self) -> ComposeResult:
+        """Build the editor layout."""
         yield Header()
         with VerticalScroll(id="editor-scroll"):
             with Vertical(id="editor-content"):
@@ -251,6 +255,7 @@ class ConfigEditorApp(App):
         return [("(default)", "")] + [(n, n) for n in names]
 
     async def on_mount(self) -> None:
+        """Register themes and build initial tool cards."""
         for t in CUSTOM_THEMES:
             self.register_theme(t)
         await self._rebuild_tools()
@@ -293,6 +298,7 @@ class ConfigEditorApp(App):
         self.tools = self._collect()["tools"]
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
+        """Handle button press events for add, remove, reorder, and save."""
         button_id = event.button.id or ""
 
         if button_id == "add-tool":
