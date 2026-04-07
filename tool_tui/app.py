@@ -2,8 +2,10 @@
 """Main application for Tool TUI."""
 
 import logging
+from functools import partial
 
 from textual.app import App, ComposeResult
+from textual.command import CommandPalette, Hits, Provider
 from textual.containers import Container, Vertical
 from textual.widgets import Footer, Header, TabPane, TabbedContent
 
@@ -14,6 +16,36 @@ from tool_tui.themes import CUSTOM_THEMES
 from tool_tui.widgets.tool_panel import ToolPanel
 
 logger = logging.getLogger(__name__)
+
+
+class AllThemesProvider(Provider):
+    """Theme provider that includes textual-ansi (excluded by Textual's default)."""
+
+    @property
+    def commands(self) -> list[tuple[str, partial[None]]]:
+        themes = self.app.available_themes
+
+        def set_app_theme(name: str) -> None:
+            self.app.theme = name
+
+        return [
+            (theme.name, partial(set_app_theme, theme.name))
+            for theme in themes.values()
+        ]
+
+    async def discover(self) -> Hits:
+        from textual.command import DiscoveryHit
+
+        for command in self.commands:
+            yield DiscoveryHit(*command)
+
+    async def search(self, query: str) -> Hits:
+        from textual.command import DiscoveryHit
+
+        matcher = self.matcher(query)
+        for name, callback in self.commands:
+            if (match := matcher.match(name)) > 0:
+                yield DiscoveryHit(name, callback, match)
 
 
 class ToolTuiApp(App):
@@ -108,6 +140,15 @@ class ToolTuiApp(App):
         self.current_view = "stacked" if self.current_view == "tabs" else "tabs"
         await self._rebuild_view()
         self.notify(f"Switched to {self.current_view} view")
+
+    def search_themes(self) -> None:
+        """Show theme palette including textual-ansi."""
+        self.push_screen(
+            CommandPalette(
+                providers=[AllThemesProvider],
+                placeholder="Search for themes…",
+            ),
+        )
 
     async def action_quit_app(self) -> None:
         """Stop all running processes and quit."""
