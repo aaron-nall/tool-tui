@@ -5,7 +5,7 @@ import logging
 from functools import partial
 
 from textual.app import App, ComposeResult
-from textual.command import CommandPalette, Hits, Provider
+from textual.command import CommandPalette, DiscoveryHit, Hits, Provider
 from textual.containers import Container, Vertical
 from textual.widgets import Footer, Header, TabPane, TabbedContent
 
@@ -33,15 +33,11 @@ class AllThemesProvider(Provider):
 
     async def discover(self) -> Hits:
         """Yield all themes as discovery hits for the command palette."""
-        from textual.command import DiscoveryHit
-
-        for command in self.commands:
-            yield DiscoveryHit(*command)
+        for name, callback in self.commands:
+            yield DiscoveryHit(name, callback)
 
     async def search(self, query: str) -> Hits:
         """Yield themes matching the given query string."""
-        from textual.command import DiscoveryHit
-
         matcher = self.matcher(query)
         for name, callback in self.commands:
             if (match := matcher.match(name)) > 0:
