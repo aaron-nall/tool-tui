@@ -23,23 +23,23 @@ class AllThemesProvider(Provider):
 
     @property
     def commands(self) -> list[tuple[str, partial[None]]]:
+        """Return a list of (theme_name, callback) tuples for all available themes."""
         themes = self.app.available_themes
 
         def set_app_theme(name: str) -> None:
             self.app.theme = name
 
-        return [
-            (theme.name, partial(set_app_theme, theme.name))
-            for theme in themes.values()
-        ]
+        return [(theme.name, partial(set_app_theme, theme.name)) for theme in themes.values()]
 
     async def discover(self) -> Hits:
+        """Yield all themes as discovery hits for the command palette."""
         from textual.command import DiscoveryHit
 
         for command in self.commands:
             yield DiscoveryHit(*command)
 
     async def search(self, query: str) -> Hits:
+        """Yield themes matching the given query string."""
         from textual.command import DiscoveryHit
 
         matcher = self.matcher(query)
